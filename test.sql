@@ -1,0 +1,1 @@
+SELECT user,authentication_string,plugin,host FROM mysql.user;
