@@ -2,7 +2,8 @@ import express, { Application } from "express";
 import morgan from "morgan";
 
 // Routes
-import testRoutes from "./routes/index.routes";
+import indexRoutes from "./routes/index.routes";
+import temporalTableRoutes from './routes/temp.routes';      // Routes to massive charge / temp table
 
 export class App {
   private app: Application;
@@ -21,7 +22,8 @@ export class App {
 
   routes() {
     // test routes
-    this.app.use(testRoutes);
+    this.app.use(indexRoutes);
+    this.app.use(temporalTableRoutes)
   }
 
   settings() {
