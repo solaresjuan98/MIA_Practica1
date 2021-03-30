@@ -3,7 +3,7 @@ import morgan from "morgan";
 
 // Routes
 import indexRoutes from "./routes/index.routes";
-import temporalTableRoutes from './routes/temp.routes';      // Routes to massive charge / temp table
+import temporalTableRoutes from './routes/queries.routes';      // Routes to massive charge / temp table
 
 export class App {
   private app: Application;

@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 // import database
 import { connect } from "../database";
 import { TempInterface } from "../interfaces/TempInterface";
-import { loadData, query_1 } from "../util/queries";
+import { loadData, query_1, query_2, query_9 } from "../util/queries";
 
 export async function getTemp(req: Request, res: Response): Promise<Response> {
   const connection = await connect();
@@ -39,6 +39,22 @@ export async function deleteTemp(req: Request, res: Response) {
 export async function query1(req: Request, res: Response): Promise<Response> {
   const connection = await connect();
   const info = await connection.query(query_1);
+
+  return res.json(info[0]);
+}
+
+// Query 2
+export async function query2(req: Request, res: Response): Promise<Response> {
+  const connection = await connect();
+  const info = await connection.query(query_2);
+
+  return res.json(info[0]);
+}
+
+// Query 9
+export async function query9(req: Request, res: Response): Promise<Response> {
+  const connection = await connect();
+  const info = await connection.query(query_9);
 
   return res.json(info[0]);
 }
