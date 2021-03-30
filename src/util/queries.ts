@@ -62,6 +62,20 @@ export const query_2 =
             AND DETALLE_TRATAMIENTO.efectividadad_en_victima > 5 \
 ';
 
+// Query 3
+export const query_3 =
+  ' \
+        SELECT VICTIMAS.nombre_victima, \
+        VICTIMAS.apellido_victima, \
+        COUNT(id_asociado) AS num_asociados \
+        FROM DETALLE_ASOCIADO, \
+        VICTIMAS \
+        WHERE VICTIMAS.id_victima = DETALLE_ASOCIADO.id_victima \
+        AND VICTIMAS.estado_victima = "Muerte" \
+        group by DETALLE_ASOCIADO.id_victima \
+        having num_asociados > 3 \
+';
+
 // Query 9
 export const query_9 =
   "\
