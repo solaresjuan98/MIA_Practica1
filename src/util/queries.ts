@@ -76,6 +76,50 @@ export const query_3 =
         having num_asociados > 3 \
 ';
 
+// Query 4
+export const query_4 =
+  '\
+      SELECT VICTIMAS.id_victima ,VICTIMAS.nombre_victima, VICTIMAS.apellido_victima, COUNT(DETALLE_CONTACTO.id_asociado) AS num_asociados \
+      FROM DETALLE_CONTACTO, \
+          VICTIMAS \
+      WHERE VICTIMAS.id_victima = DETALLE_CONTACTO.id_victima \
+        AND VICTIMAS.estado_victima = "Sospecha" \
+        AND DETALLE_CONTACTO.tipo_contacto = "Beso" \
+      GROUP BY DETALLE_CONTACTO.id_victima \
+      HAVING num_asociados > 2  ';
+
+// Query 5
+export const query_5 =
+  '\
+        SELECT DISTINCT VICTIMAS.nombre_victima, \
+                        VICTIMAS.apellido_victima, \
+                        COUNT(DETALLE_TRATAMIENTO.id_victima) AS veces_aplicado_oxigeno \
+        FROM VICTIMAS, \
+            DETALLE_TRATAMIENTO \
+        WHERE DETALLE_TRATAMIENTO.id_tratamiento = (SELECT id_tratamiento \
+                                                    FROM TRATAMIENTO \
+                                                    WHERE nombre_tratamiento = "Oxigeno" ) \
+          AND DETALLE_TRATAMIENTO.id_victima = VICTIMAS.id_victima \
+        GROUP BY DETALLE_TRATAMIENTO.id_victima \
+        ORDER BY veces_aplicado_oxigeno DESC \
+        limit 5; \
+  ';
+
+// Query 7
+export const query_7 =
+  '\
+      SELECT DISTINCT VICTIMAS.nombre_victima, VICTIMAS.apellido_victima, VICTIMAS.direccion_victima \
+      FROM VICTIMAS \
+              INNER JOIN DETALLE_TRATAMIENTO on VICTIMAS.id_victima = DETALLE_TRATAMIENTO.id_victima \
+          AND (SELECT COUNT(DETALLE_TRATAMIENTO.id_victima) \
+              FROM DETALLE_TRATAMIENTO \
+              WHERE DETALLE_TRATAMIENTO.id_victima = VICTIMAS.id_victima) = 2 \
+              INNER JOIN DETALLE_ASOCIADO ON VICTIMAS.id_victima = DETALLE_ASOCIADO.id_victima \
+          AND (SELECT COUNT(DETALLE_ASOCIADO.id_victima) \
+              FROM DETALLE_ASOCIADO \
+              WHERE DETALLE_ASOCIADO.id_victima = VICTIMAS.id_victima) < 2 \
+          AND VICTIMAS.hospital_victima != "" ';
+
 // Query 9
 export const query_9 =
   "\
