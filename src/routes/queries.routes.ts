@@ -11,6 +11,7 @@ import {
   query3,
   query5,
   query4,
+  query7,
 } from "../controllers/queries.controllers";
 
 router.route("/temp").get(getTemp); // Test route
@@ -21,5 +22,6 @@ router.route("/consulta2").get(query2); // Query 2
 router.route("/consulta3").get(query3); // Query 3
 router.route("/consulta4").get(query4); // Query 4
 router.route("/consulta5").get(query5); // Query 5
+router.route("/consulta7").get(query7); // Query 7
 router.route("/consulta9").get(query9); // Query 9
 export default router;

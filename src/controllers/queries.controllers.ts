@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 // import database
 import { connect } from "../database";
-import { TempInterface } from "../interfaces/TempInterface";
+// import { TempInterface } from "../interfaces/TempInterface";
 import {
   loadData,
   query_1,
@@ -10,6 +10,7 @@ import {
   query_3,
   query_4,
   query_5,
+  query_7,
   query_9,
 } from "../util/queries";
 
@@ -68,18 +69,25 @@ export async function query3(req: Request, res: Response): Promise<Response> {
 }
 
 // Query 4
-export async function query4(req:Request, res: Response): Promise<Response> {
+export async function query4(req: Request, res: Response): Promise<Response> {
   const connetion = await connect();
   const info = await connetion.query(query_4);
 
   return res.json(info[0]);
-
 }
 
 // Query 5
 export async function query5(req: Request, res: Response): Promise<Response> {
   const connection = await connect();
   const info = await connection.query(query_5);
+
+  return res.json(info[0]);
+}
+
+// Query 7
+export async function query7(req: Request, res: Response): Promise<Response> {
+  const connection = await connect();
+  const info = await connection.query(query_7);
 
   return res.json(info[0]);
 }

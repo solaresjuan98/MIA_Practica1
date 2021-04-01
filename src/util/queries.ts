@@ -111,7 +111,7 @@ export const query_7 =
       SELECT DISTINCT VICTIMAS.nombre_victima, VICTIMAS.apellido_victima, VICTIMAS.direccion_victima \
       FROM VICTIMAS \
               INNER JOIN DETALLE_TRATAMIENTO on VICTIMAS.id_victima = DETALLE_TRATAMIENTO.id_victima \
-          AND (SELECT COUNT(DETALLE_TRATAMIENTO.id_victima) \
+          AND ( SELECT COUNT(DETALLE_TRATAMIENTO.id_victima) \
               FROM DETALLE_TRATAMIENTO \
               WHERE DETALLE_TRATAMIENTO.id_victima = VICTIMAS.id_victima) = 2 \
               INNER JOIN DETALLE_ASOCIADO ON VICTIMAS.id_victima = DETALLE_ASOCIADO.id_victima \
