@@ -2,7 +2,31 @@ import { Request, Response } from "express";
 
 // import database
 import { connect } from "../database";
-// import { TempInterface } from "../interfaces/TempInterface";
+import {
+  chargeAsociado,
+  chargeCaso,
+  chargeDetAsociado,
+  chargeDetContacto,
+  chargeDetTratamiento,
+  chargeDetUbicacion,
+  chargeHospitales,
+  chargeTratamiento,
+  chargeUbicacion,
+  chargeVictimas,
+  createAsociados,
+  createCaso,
+  createDetAsociados,
+  createDetContacto,
+  createDetTratamiento,
+  createDetUbicaciones,
+  createHospitales,
+  createTratamiento,
+  createUbicaciones,
+  createVictimas,
+} from "../util/dataCharge";
+//import { fillModel } from "../util/dataCharge";
+import { deleteModel } from "../util/dataDelete";
+
 import {
   loadData,
   query_1,
@@ -98,4 +122,56 @@ export async function query9(req: Request, res: Response): Promise<Response> {
   const info = await connection.query(query_9);
 
   return res.json(info[0]);
+}
+
+// Filling ER model
+export async function cargarModelo(req: Request, res: Response) {
+  const connection = await connect();
+
+  connection.query(createHospitales);
+  connection.query(createVictimas);
+  connection.query(createCaso);
+  connection.query(createTratamiento);
+  connection.query(createAsociados);
+  connection.query(createDetAsociados);
+  connection.query(createUbicaciones);
+  connection.query(createDetUbicaciones);
+  connection.query(createDetContacto);
+  connection.query(createDetTratamiento);
+
+  // Charging data
+  connection.query(chargeHospitales);
+  connection.query(chargeVictimas);
+  connection.query(chargeTratamiento);
+  connection.query(chargeDetTratamiento);
+  connection.query(chargeCaso);
+  connection.query(chargeAsociado);
+  connection.query(chargeDetAsociado);
+  connection.query(chargeUbicacion);
+  connection.query(chargeDetUbicacion);
+  connection.query(chargeDetContacto);
+
+  return res.json({
+    message: "Model charged",
+  });
+}
+
+// Delete model tables
+export async function eliminarModelo(req: Request, res: Response) {
+  const connection = await connect();
+
+  await connection.query("DROP TABLE DETALLE_CONTACTO");
+  await connection.query("DROP TABLE DETALLE_UBICACION");
+  await connection.query("DROP TABLE UBICACION");
+  await connection.query("DROP TABLE DETALLE_ASOCIADO");
+  await connection.query("DROP TABLE ASOCIADOS");
+  await connection.query("DROP TABLE CASO");
+  await connection.query("DROP TABLE DETALLE_TRATAMIENTO");
+  await connection.query("DROP TABLE TRATAMIENTO");
+  await connection.query("DROP TABLE VICTIMAS");
+  await connection.query("DROP TABLE HOSPITALES");
+
+  return res.json({
+    message: "Model deleted",
+  });
 }

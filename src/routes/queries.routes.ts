@@ -12,9 +12,12 @@ import {
   query5,
   query4,
   query7,
+  cargarModelo,
+  eliminarModelo,
 } from "../controllers/queries.controllers";
 
-router.route("/temp").get(getTemp); // Test route
+
+//router.route("/temp").get(getTemp); // Test route
 router.route("/cargarTemporal").post(massiveCharge); // Massive charge
 router.route("/eliminarTemporal").delete(deleteTemp); // Delete temporal table
 router.route("/consulta1").get(query1); // Query 1
@@ -24,4 +27,6 @@ router.route("/consulta4").get(query4); // Query 4
 router.route("/consulta5").get(query5); // Query 5
 router.route("/consulta7").get(query7); // Query 7
 router.route("/consulta9").get(query9); // Query 9
+router.route("/cargarModelo").post(cargarModelo);
+router.route("/eliminarModelo").delete(eliminarModelo); // /eliminarModelo
 export default router;
