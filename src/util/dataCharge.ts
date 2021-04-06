@@ -1,106 +1,105 @@
 export const prueb =
   "\nCREATE TABLE IF NOT EXISTS HOSPITALES\n(\n    id_hospital        int NOT NULL AUTO_INCREMENT PRIMARY KEY,\n    nombre_hospital    VARCHAR(100),\n    direccion_hospital VARCHAR(100)\n);\n\n\nCREATE TABLE IF NOT EXISTS VICTIMAS\n(\n    id_victima           int NOT NULL AUTO_INCREMENT PRIMARY KEY,\n    nombre_victima       VARCHAR(20),\n    apellido_victima     VARCHAR(20),\n    direccion_victima    VARCHAR(50),\n    fecha_muerte_victima VARCHAR(50),\n    estado_victima       VARCHAR(50),\n    hospital_victima     VARCHAR(50)\n);\n\n\nCREATE TABLE IF NOT EXISTS CASO\n(\n    id_caso                int AUTO_INCREMENT NOT NULL PRIMARY KEY,\n    id_victima             int                NOT NULL,\n    fecha_primera_sospecha VARCHAR(50),\n    fecha_registro_victima VARCHAR(50),\n    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima)\n);\n\n\nCREATE TABLE IF NOT EXISTS TRATAMIENTO\n(\n    id_tratamiento     int NOT NULL AUTO_INCREMENT PRIMARY KEY,\n    nombre_tratamiento varchar(50),\n    efectividad        int NOT NULL\n\n);\n\nCREATE TABLE IF NOT EXISTS DETALLE_TRATAMIENTO\n(\n\n    id_tratamiento           int         NOT NULL,\n    id_victima               int         NOT NULL,\n    fecha_inicio_tratamiento VARCHAR(50) NOT NULL,\n    fecha_fin_tratamiento    VARCHAR(50) NOT NULL,\n    efectividadad_en_victima int,\n    FOREIGN KEY (id_tratamiento) REFERENCES TRATAMIENTO (id_tratamiento),\n    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima)\n\n);\n\n\nCREATE TABLE IF NOT EXISTS ASOCIADOS\n(\n    id_asociado       int NOT NULL AUTO_INCREMENT PRIMARY KEY,\n    nombre_asociado   varchar(20),\n    apellido_asociado varchar(20)\n);\n\nCREATE TABLE IF NOT EXISTS DETALLE_ASOCIADO\n(\n    id_victima    int NOT NULL,\n    id_asociado   int NOT NULL,\n    fecha_conocio varchar(50),\n    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima),\n    FOREIGN KEY (id_asociado) REFERENCES ASOCIADOS (id_asociado)\n);\n\nCREATE TABLE IF NOT EXISTS UBICACION\n(\n    id_ubicacion     int NOT NULL AUTO_INCREMENT PRIMARY KEY,\n    nombre_ubicacion VARCHAR(100)\n);\n\nCREATE TABLE IF NOT EXISTS DETALLE_UBICACION\n(\n    id_victima    int,\n    id_ubicacion  int,\n    fecha_llegada varchar(50),\n    fecha_salida  varchar(50),\n    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima),\n    FOREIGN KEY (id_ubicacion) REFERENCES UBICACION (id_ubicacion)\n);\n\n\nCREATE TABLE IF NOT EXISTS DETALLE_CONTACTO\n(\n    id_victima int,\n    id_asociado int,\n    tipo_contacto VARCHAR(30),\n    fecha_inicio_contacto VARCHAR(50),\n    fecha_fin_contacto VARCHAR(50),\n    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima),\n    FOREIGN KEY (id_asociado) REFERENCES ASOCIADOS (id_asociado)\n);\n";
 
-export const fillQuery =
-  "\
-  use grand_virus_epicenter;\
-CREATE TABLE IF NOT EXISTS  HOSPITALES \
-( \
-    id_hospital int NOT NULL AUTO_INCREMENT PRIMARY KEY, \
-    nombre_hospital    VARCHAR(100), \
-    direccion_hospital VARCHAR(100) \
-);\
-\
-use grand_virus_epicenter;\
-CREATE TABLE IF NOT EXISTS  VICTIMAS \
-( \
-    id_victima int NOT NULL AUTO_INCRE \
-    MENT PRIMARY KEY, \
-    nombre_victima       VARCHAR(20), \
-    apellido_victima     VARCHAR(20), \
-    direccion_victima    VARCHAR(50), \
-    fecha_muerte_victima VARCHAR(50), \
-    estado_victima       VARCHAR(50), \
-    hospital_victima     VARCHAR(50), \
-); \
-use grand_virus_epicenter;\
-CREATE TABLE IF NOT EXISTS  CASO\
-(\
-    id_caso                int AUTO_INCREMENT NOT NULL PRIMARY KEY, \
-    id_victima             int                NOT NULL, \
-    fecha_primera_sospecha VARCHAR(50), \
-    fecha_registro_victima VARCHAR(50), \
-    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima) \
-);\
-use grand_virus_epicenter;\
-CREATE TABLE IF NOT EXISTS  TRATAMIENTO \
-( \
-    id_tratamiento     int NOT NULL AUTO_INCREMENT PRIMARY KEY, \
-    nombre_tratamiento varchar(50), \
-    efectividad        int NOT NULL \
-    \
-);   \
-use grand_virus_epicenter;\
-CREATE TABLE IF NOT EXISTS  DETALLE_TRATAMIENTO \
-( \
-    \
-    id_tratamiento           int         NOT NULL, \
-    id_victima               int         NOT NULL, \
-    fecha_inicio_tratamiento VARCHAR(50) NOT NULL, \
-    fecha_fin_tratamiento    VARCHAR(50) NOT NULL, \
-    efectividadad_en_victima int, \
-    FOREIGN KEY (id_tratamiento) REFERENCES TRATAMIENTO (id_tratamiento), \
-    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima) \
-);\
-use grand_virus_epicenter;\
-CREATE TABLE IF NOT EXISTS  ASOCIADOS \
-    ( \
-        id_asociado       int NOT NULL AUTO_INCREMENT PRIMARY KEY, \
-        nombre_asociado   varchar(20), \
-        apellido_asociado varchar(20) \
-    ); \
-\
-use grand_virus_epicenter;\
-CREATE TABLE IF NOT EXISTS  DETALLE_ASOCIADO \
-    (  \
-        id_victima    int NOT NULL, \
-        id_asociado   int NOT NULL, \
-        fecha_conocio varchar(50), \
-        FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima), \
-        FOREIGN KEY (id_asociado) REFERENCES ASOCIADOS (id_asociado) \
-    );\
-\
-use grand_virus_epicenter; \
-CREATE TABLE IF NOT EXISTS  UBICACION \
-( \
-    id_ubicacion     int NOT NULL AUTO_INCREMENT PRIMARY KEY, \
-    nombre_ubicacion VARCHAR(100) \
-); \
-\
-use grand_virus_epicenter; \
-CREATE TABLE IF NOT EXISTS  DETALLE_UBICACION \
-( \
-    id_victima    int, \
-    id_ubicacion  int, \
-    fecha_llegada varchar(50), \
-    fecha_salida  varchar(50), \
-    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima), \
-    FOREIGN KEY (id_ubicacion) REFERENCES UBICACION (id_ubicacion) \
-) ;\
-\
-use grand_virus_epicenter; \
-CREATE TABLE IF NOT EXISTS  DETALLE_CONTACTO \
-( \
-    id_victima int, \
-    id_asociado int, \
-    tipo_contacto VARCHAR(30), \
-    fecha_inicio_contacto VARCHAR(50), \
-    fecha_fin_contacto VARCHAR(50), \
-    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima), \
-    FOREIGN KEY (id_asociado) REFERENCES ASOCIADOS (id_asociado) \
-);\
+  export const fillQuery =
+  "\n \
+  use grand_virus_epicenter;\n \
+CREATE TABLE IF NOT EXISTS  HOSPITALES \n \
+( \n \
+    id_hospital int NOT NULL AUTO_INCREMENT PRIMARY KEY, \n \
+    nombre_hospital    VARCHAR(100), \n \
+    direccion_hospital VARCHAR(100) \n \
+);\n \
+\n \
+use grand_virus_epicenter;\n \
+CREATE TABLE IF NOT EXISTS  VICTIMAS \n \
+( \n \
+    id_victima int NOT NULL AUTO_INCRE \n \
+    MENT PRIMARY KEY, \n \
+    nombre_victima       VARCHAR(20), \n \
+    apellido_victima     VARCHAR(20), \n \
+    direccion_victima    VARCHAR(50), \n \
+    fecha_muerte_victima VARCHAR(50), \n \
+    estado_victima       VARCHAR(50), \n \
+    hospital_victima     VARCHAR(50), \n \
+); \n \
+use grand_virus_epicenter;\n \
+CREATE TABLE IF NOT EXISTS  CASO\n \
+(\n \
+    id_caso                int AUTO_INCREMENT NOT NULL PRIMARY KEY, \n \
+    id_victima             int                NOT NULL, \n \
+    fecha_primera_sospecha VARCHAR(50), \n \
+    fecha_registro_victima VARCHAR(50), \n \
+    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima) \n \
+);\n \
+use grand_virus_epicenter;\n \
+CREATE TABLE IF NOT EXISTS  TRATAMIENTO \n \
+( \n \
+    id_tratamiento     int NOT NULL AUTO_INCREMENT PRIMARY KEY, \n \
+    nombre_tratamiento varchar(50), \n \
+    efectividad        int NOT NULL \n \
+    \n \
+);   \n \
+use grand_virus_epicenter;\n \
+CREATE TABLE IF NOT EXISTS  DETALLE_TRATAMIENTO \n \
+( \n \
+    \n \
+    id_tratamiento           int         NOT NULL, \n \
+    id_victima               int         NOT NULL, \n \
+    fecha_inicio_tratamiento VARCHAR(50) NOT NULL, \n \
+    fecha_fin_tratamiento    VARCHAR(50) NOT NULL, \n \
+    efectividadad_en_victima int, \n \
+    FOREIGN KEY (id_tratamiento) REFERENCES TRATAMIENTO (id_tratamiento), \n \
+    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima) \n \
+);\n \
+use grand_virus_epicenter;\n \
+CREATE TABLE IF NOT EXISTS  ASOCIADOS \n \
+    ( \n \
+        id_asociado       int NOT NULL AUTO_INCREMENT PRIMARY KEY, \n \
+        nombre_asociado   varchar(20), \n \
+        apellido_asociado varchar(20) \n \
+    ); \n \
+\n \
+use grand_virus_epicenter;\n \
+CREATE TABLE IF NOT EXISTS  DETALLE_ASOCIADO \n \
+    (  \n \
+        id_victima    int NOT NULL, \n \
+        id_asociado   int NOT NULL, \n \
+        fecha_conocio varchar(50), \n \
+        FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima), \n \
+        FOREIGN KEY (id_asociado) REFERENCES ASOCIADOS (id_asociado) \n \
+    );\n \
+\n \
+use grand_virus_epicenter; \n \
+CREATE TABLE IF NOT EXISTS  UBICACION \n \
+( \n \
+    id_ubicacion     int NOT NULL AUTO_INCREMENT PRIMARY KEY, \n \
+    nombre_ubicacion VARCHAR(100) \n \
+); \n \
+\n \
+use grand_virus_epicenter; \n \
+CREATE TABLE IF NOT EXISTS  DETALLE_UBICACION \n \
+( \n \
+    id_victima    int, \n \
+    id_ubicacion  int, \n \
+    fecha_llegada varchar(50), \n \
+    fecha_salida  varchar(50), \n \
+    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima), \n \
+    FOREIGN KEY (id_ubicacion) REFERENCES UBICACION (id_ubicacion) \n \
+) ;\n \
+\n \
+use grand_virus_epicenter; \n \
+CREATE TABLE IF NOT EXISTS  DETALLE_CONTACTO \n \
+( \n \
+    id_victima int, \n \
+    id_asociado int, \n \
+    tipo_contacto VARCHAR(30), \n \
+    fecha_inicio_contacto VARCHAR(50), \n \
+    fecha_fin_contacto VARCHAR(50), \n \
+    FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima), \n \
+    FOREIGN KEY (id_asociado) REFERENCES ASOCIADOS (id_asociado) \n \
+);\n \
 ";
-
 export const createHospitales =
   "\
 CREATE TABLE IF NOT EXISTS  HOSPITALES \
@@ -192,15 +191,25 @@ export const createUbicaciones =
 
 export const createDetUbicaciones =
   " \
-    CREATE TABLE IF NOT EXISTS  DETALLE_UBICACION \
-    ( \
-        id_victima    int, \
-        id_ubicacion  int, \
-        fecha_llegada varchar(50), \
-        fecha_salida  varchar(50), \
-        FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima), \
-        FOREIGN KEY (id_ubicacion) REFERENCES UBICACION (id_ubicacion) \
-    )";
+    CREATE TABLE IF NOT EXISTS  DETALLE_UBICACION \n \
+    ( \n \
+        id_victima    int, \n \
+        id_ubicacion  int, \n \
+        fecha_llegada varchar(50), \n \
+        fecha_salida  varchar(50), \n \
+        FOREIGN KEY (id_victima) REFERENCES VICTIMAS (id_victima), \n \
+        FOREIGN KEY (id_ubicacion) REFERENCES UBICACION (id_ubicacion) \n \
+    ); \n \
+    \n \
+    /*INSERT INTO DETALLE_UBICACION \n \
+        (id_victima, id_ubicacion, fecha_llegada, fecha_salida) \n \
+    SELECT DISTINCT VICTIMAS.id_victima, UBICACION.id_ubicacion, temp_table.fecha_llegada, temp_table.fecha_retiro \n \
+    FROM VICTIMAS, \n \
+        UBICACION, \n \
+        temp_table \n \
+    WHERE temp_table.nombre_victima = VICTIMAS.nombre_victima \n \
+    AND temp_table.ubicacion_victima = UBICACION.nombre_ubicacion ; */ \n \
+    ";
 
 export const createDetContacto =
   "\
@@ -331,5 +340,5 @@ export const chargeDetContacto =
         temp_table \
     WHERE temp_table.nombre_victima = VICTIMAS.nombre_victima \
     AND temp_table.nombre_asociado = ASOCIADOS.nombre_asociado \
-    AND contacto_fisico != " " \
+    AND contacto_fisico != "" \
 ';

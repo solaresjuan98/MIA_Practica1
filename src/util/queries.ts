@@ -41,12 +41,12 @@ export const loadData =
 // Query 1
 export const query_1 =
   '\
-        SELECT distinct hospital_victima as hospital, direccion_hospital , COUNT(*) as numero_fallecidos\
-        FROM VICTIMAS, HOSPITALES\
-        where estado_victima = "Muerte" \
-        and hospital_victima != "" \
-        and VICTIMAS.hospital_victima =HOSPITALES.nombre_hospital\
-        GROUP BY hospital_victima, direccion_hospital\
+  SELECT DISTINCT hospital_victima, HOSPITALES.direccion_hospital, COUNT(id_victima) AS num_fallecidos\n \
+  FROM VICTIMAS \n \
+           INNER JOIN HOSPITALES ON VICTIMAS.hospital_victima = HOSPITALES.nombre_hospital \n \
+  WHERE estado_victima = "Muerte" \n \
+     OR fecha_muerte_victima != "" and hospital_victima != "" \n \
+  GROUP BY hospital_victima, direccion_hospital \n \
 ';
 
 // Query 2
@@ -65,16 +65,15 @@ export const query_2 =
 // Query 3
 export const query_3 =
   ' \
-        SELECT VICTIMAS.nombre_victima, \
-        VICTIMAS.apellido_victima, \
-        COUNT(id_asociado) AS num_asociados \
-        FROM DETALLE_ASOCIADO, \
-        VICTIMAS \
-        WHERE VICTIMAS.id_victima = DETALLE_ASOCIADO.id_victima \
-        AND VICTIMAS.estado_victima = "Muerte" \
-        group by DETALLE_ASOCIADO.id_victima \
-        having num_asociados > 3 \
-';
+  SELECT VICTIMAS.id_victima,\
+  VICTIMAS.nombre_victima, \
+  VICTIMAS.apellido_victima, \
+  COUNT(DA.id_asociado) AS num_asociados \
+FROM VICTIMAS \
+    INNER JOIN DETALLE_ASOCIADO DA on VICTIMAS.id_victima = DA.id_victima \
+WHERE VICTIMAS.estado_victima = "Muerte" OR fecha_muerte_victima != "" \
+GROUP BY DA.id_victima \
+having num_asociados > 3 ';
 
 // Query 4
 export const query_4 =
@@ -91,19 +90,34 @@ export const query_4 =
 // Query 5
 export const query_5 =
   '\
-        SELECT DISTINCT VICTIMAS.nombre_victima, \
-                        VICTIMAS.apellido_victima, \
-                        COUNT(DETALLE_TRATAMIENTO.id_victima) AS veces_aplicado_oxigeno \
-        FROM VICTIMAS, \
-            DETALLE_TRATAMIENTO \
-        WHERE DETALLE_TRATAMIENTO.id_tratamiento = (SELECT id_tratamiento \
-                                                    FROM TRATAMIENTO \
-                                                    WHERE nombre_tratamiento = "Oxigeno" ) \
-          AND DETALLE_TRATAMIENTO.id_victima = VICTIMAS.id_victima \
-        GROUP BY DETALLE_TRATAMIENTO.id_victima \
-        ORDER BY veces_aplicado_oxigeno DESC \
-        limit 5; \
+    SELECT V.nombre_victima, \
+    V.apellido_victima, \
+    COUNT(DETALLE_TRATAMIENTO.id_victima) AS veces_aplicado_oxigeno \
+  FROM DETALLE_TRATAMIENTO \
+      INNER JOIN VICTIMAS V on DETALLE_TRATAMIENTO.id_victima = V.id_victima \
+  WHERE DETALLE_TRATAMIENTO.id_tratamiento = \
+  (SELECT id_tratamiento FROM TRATAMIENTO WHERE nombre_tratamiento = "Oxigeno") \
+  GROUP BY DETALLE_TRATAMIENTO.id_victima \
+  ORDER BY veces_aplicado_oxigeno DESC \
+  LIMIT 5 \
   ';
+
+
+// Query 6
+export const query_6 = 
+' \
+  SELECT DISTINCT \
+                  VICTIMAS.nombre_victima, \
+                  VICTIMAS.apellido_victima, \
+                  VICTIMAS.fecha_muerte_victima \
+  FROM VICTIMAS \
+          INNER JOIN DETALLE_TRATAMIENTO DT on VICTIMAS.id_victima = DT.id_victima \
+      AND DT.id_tratamiento = \
+          (SELECT TRATAMIENTO.id_tratamiento FROM TRATAMIENTO WHERE nombre_tratamiento = "Manejo de la presion arterial") \
+          INNER JOIN DETALLE_UBICACION DU on VICTIMAS.id_victima = DU.id_victima \
+      AND DU.id_ubicacion = (SELECT UBICACION.id_ubicacion FROM UBICACION WHERE nombre_ubicacion = "1987 Delphine Well") \
+  where VICTIMAS.fecha_muerte_victima != "" \
+';
 
 // Query 7
 export const query_7 =
@@ -117,8 +131,31 @@ export const query_7 =
               INNER JOIN DETALLE_ASOCIADO ON VICTIMAS.id_victima = DETALLE_ASOCIADO.id_victima \
           AND (SELECT COUNT(DETALLE_ASOCIADO.id_victima) \
               FROM DETALLE_ASOCIADO \
-              WHERE DETALLE_ASOCIADO.id_victima = VICTIMAS.id_victima) < 2 \
+              WHERE DETALLE_ASOCIADO.id_victima = VICTIMAS.id_victima) <= 2 \
           AND VICTIMAS.hospital_victima != "" ';
+
+export const query_8 =
+  "\
+  (SELECT DISTINCT V.id_victima, \
+                  V.nombre_victima, \
+                  V.apellido_victima, \
+                  count(DETALLE_TRATAMIENTO.id_victima) as veces_tratado \
+  FROM DETALLE_TRATAMIENTO \
+            INNER JOIN VICTIMAS V on DETALLE_TRATAMIENTO.id_victima = V.id_victima \
+  GROUP BY DETALLE_TRATAMIENTO.id_victima \
+  ORDER BY veces_tratado desc \
+  LIMIT 5) \
+  UNION \
+  (SELECT DISTINCT V.id_victima, \
+                  V.nombre_victima, \
+                  V.apellido_victima, \
+                  count(DETALLE_TRATAMIENTO.id_victima) as veces_tratado \
+  FROM DETALLE_TRATAMIENTO \
+            INNER JOIN VICTIMAS V on DETALLE_TRATAMIENTO.id_victima = V.id_victima \
+  GROUP BY DETALLE_TRATAMIENTO.id_victima \
+  ORDER BY veces_tratado ASC \
+  LIMIT 5) \
+";
 
 // Query 9
 export const query_9 =

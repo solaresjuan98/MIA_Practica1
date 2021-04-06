@@ -23,6 +23,7 @@ import {
   createTratamiento,
   createUbicaciones,
   createVictimas,
+  fillQuery,
 } from "../util/dataCharge";
 //import { fillModel } from "../util/dataCharge";
 import { deleteModel } from "../util/dataDelete";
@@ -34,7 +35,9 @@ import {
   query_3,
   query_4,
   query_5,
+  query_6,
   query_7,
+  query_8,
   query_9,
 } from "../util/queries";
 
@@ -108,10 +111,26 @@ export async function query5(req: Request, res: Response): Promise<Response> {
   return res.json(info[0]);
 }
 
+// Query 6
+export async function query6(req: Request, res: Response): Promise<Response> {
+  const connection = await connect();
+  const info = await connection.query(query_6);
+
+  return res.json(info[0]);
+}
+
 // Query 7
 export async function query7(req: Request, res: Response): Promise<Response> {
   const connection = await connect();
   const info = await connection.query(query_7);
+
+  return res.json(info[0]);
+}
+
+// Query 8
+export async function query8(req: Request, res: Response): Promise<Response> {
+  const connection = await connect();
+  const info = await connection.query(query_8);
 
   return res.json(info[0]);
 }
@@ -124,32 +143,39 @@ export async function query9(req: Request, res: Response): Promise<Response> {
   return res.json(info[0]);
 }
 
+
+
 // Filling ER model
 export async function cargarModelo(req: Request, res: Response) {
   const connection = await connect();
 
-  connection.query(createHospitales);
-  connection.query(createVictimas);
-  connection.query(createCaso);
-  connection.query(createTratamiento);
-  connection.query(createAsociados);
-  connection.query(createDetAsociados);
-  connection.query(createUbicaciones);
-  connection.query(createDetUbicaciones);
-  connection.query(createDetContacto);
-  connection.query(createDetTratamiento);
+  try {
+    // CREATING TABLES
+    await connection.query(createHospitales);
+    await connection.query(createVictimas);
+    await connection.query(createCaso);
+    await connection.query(createTratamiento);
+    await connection.query(createAsociados);
+    await connection.query(createDetAsociados);
+    await connection.query(createUbicaciones);
+    await connection.query(createDetUbicaciones);
+    await connection.query(createDetContacto);
+    await connection.query(createDetTratamiento);
 
-  // Charging data
-  connection.query(chargeHospitales);
-  connection.query(chargeVictimas);
-  connection.query(chargeTratamiento);
-  connection.query(chargeDetTratamiento);
-  connection.query(chargeCaso);
-  connection.query(chargeAsociado);
-  connection.query(chargeDetAsociado);
-  connection.query(chargeUbicacion);
-  connection.query(chargeDetUbicacion);
-  connection.query(chargeDetContacto);
+    // FILLING TABLES
+    await connection.query(chargeHospitales);
+    await connection.query(chargeVictimas);
+    await connection.query(chargeTratamiento);
+    await connection.query(chargeDetTratamiento);
+    await connection.query(chargeCaso);
+    await connection.query(chargeAsociado);
+    await connection.query(chargeDetAsociado);
+    await connection.query(chargeUbicacion);
+    await connection.query(chargeDetUbicacion);
+    await connection.query(chargeDetContacto);
+  } catch (error) {
+    console.log("Error :v");
+  }
 
   return res.json({
     message: "Model charged",
