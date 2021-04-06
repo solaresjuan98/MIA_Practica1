@@ -2,6 +2,37 @@
 use grand_virus_epicenter;
 show tables;
 
+-- create temporal table
+CREATE TABLE temp_table
+(
+
+    nombre_victima           VARCHAR(100),
+    apellido_victima         VARCHAR(100),
+    direccion_victima        VARCHAR(100),
+    fecha_primera_sospecha   VARCHAR(100),
+    fecha_confirmacion       VARCHAR(100),
+    fecha_muerte             VARCHAR(100),
+    estado_victima           VARCHAR(100),
+    nombre_asociado          VARCHAR(100),
+    apellido_asociado        VARCHAR(100),
+    fecha_conocio            VARCHAR(100),
+    contacto_fisico          VARCHAR(100),
+    fecha_inicio_contacto    VARCHAR(100),
+    fecha_fin_contacto       VARCHAR(100),
+    nombre_hospital          VARCHAR(100),
+    direccion_hospital       VARCHAR(100),
+    ubicacion_victima        VARCHAR(100),
+    fecha_llegada            VARCHAR(100),
+    fecha_retiro             VARCHAR(100),
+    tratamiento              VARCHAR(100),
+    efectividad              VARCHAR(100),
+    fecha_inicio_tratamiento VARCHAR(100),
+    fecha_fin_tratamiento    VARCHAR(100),
+    efectividad_en_victima   VARCHAR(100)
+
+);
+
+
 -- "HOSPITALES" TABLE
 CREATE TABLE IF NOT EXISTS HOSPITALES
 (
